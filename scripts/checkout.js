@@ -12,8 +12,6 @@ cart.forEach((cartItem) => {
     if(product.id === productId) matchingProduct = product;
   });
 
-  console.log(matchingProduct);
-
   cartSummaryHTML += `
     <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
       <div class="delivery-date">
@@ -104,3 +102,11 @@ document.querySelectorAll('.js-delete-link').forEach((link) => {
     container.remove();
   })
 });
+
+let cartQuantity = 0;
+
+cart.forEach((cartItem) => {
+  cartQuantity += cartItem.quantity;
+})
+
+document.querySelector('.js-return-to-home-link').innerHTML = `${cartQuantity} items`;
