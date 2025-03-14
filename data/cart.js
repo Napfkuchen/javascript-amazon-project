@@ -1,3 +1,5 @@
+import {validDeliveryOption} from './deliveryOptions.js';
+
 export let cart;
 
 loadFromStorage();
@@ -48,41 +50,14 @@ export function removeFromCart(productId) {
   const newCart = [];
 
   cart.forEach((cartItem) => {
-    if(cartItem.productId !== productId) newCart.push(cartItem);
-  })
+    if (cartItem.productId !== productId) {
+      newCart.push(cartItem);
+    }
+  });
 
   cart = newCart;
 
   saveToStorage();
-}
-
-export function calculateCartQuantity() {
-  let cartQuantity = 0;
-
-  cart.forEach((cartItem) => cartQuantity += cartItem.quantity );
-
-  return cartQuantity;
-}
-
-export function updateQuantity(productId, newQuantity) {
-  let matchingItem;
-
-  cart.forEach((cartItem) => {
-    if (productId === cartItem.productId) {
-      matchingItem = cartItem;
-    }
-  });
-
-  if (matchingItem) {
-    matchingItem.quantity = newQuantity;
-  } else {
-    cart.push({
-      productId,
-      newQuantity
-    });
-  }
-
-  saveToStorage()
 }
 
 export function updateDeliveryOption(productId, deliveryOptionId) {
@@ -93,6 +68,14 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
       matchingItem = cartItem;
     }
   });
+
+  if (!matchingItem) {
+    return;
+  }
+
+  if (!validDeliveryOption(deliveryOptionId)) {
+    return;
+  }
 
   matchingItem.deliveryOptionId = deliveryOptionId;
 
